@@ -14,6 +14,7 @@
 #include "MetroidPrime/Weapons/CProjectileInfo.hpp"
 
 #include "Kyoto/Audio/CSfxHandle.hpp"
+#include "Kyoto/CRandom16.hpp"
 
 #include "Kyoto/Graphics/CColor.hpp"
 #include "Kyoto/SObjectTag.hpp"
@@ -234,6 +235,9 @@ private:
   void UpdateTractorBeams(float dt, CStateManager& mgr);
   void UpdateUnderbodyDamage(CStateManager& mgr);
   void DoFaceHitCheck(TUniqueId uid, CStateManager& mgr);
+#if VERSION >= VERSION_GM8P_00
+  void DoBodyHitCheck(TUniqueId uid, CStateManager& mgr);
+#endif
   int SeverityForAttackType(EAttackType attack) const;
   pas::ELocomotionType SeverityForLocomotionType(EAttackType attack) const;
   bool CanTransitionFromReady(EAttackType attack);
@@ -298,6 +302,9 @@ private:
   uint x57c_;
   uint x580_;
   bool x584_;
+#if VERSION >= VERSION_GM8P_00
+  float mRicochetSfxTimer;
+#endif
   rstl::reserved_vector< CVulnerabilityEntry, kVuln_Count > x588_;
   rstl::reserved_vector< CBoneTracking, 6 > x76c_;
   CHealthInfo x8c0_;
@@ -383,6 +390,9 @@ private:
   rstl::reserved_vector< CMetroidPrimeAttackWeights, 4 > x1160_;
   int x1254_;
   rstl::reserved_vector< float, 14 > x1258_;
+#if VERSION >= VERSION_GM8P_00
+  CRandom16 mAttackRandom;
+#endif
   CCameraShakeData x1294_;
   CCameraShakeData x1368_;
   rstl::single_ptr< CProjectedShadow > x143c_;
@@ -390,7 +400,7 @@ private:
   bool x1444_24_ : 1;
   bool x1444_25_ : 1;
 };
-CHECK_CHILD_SIZEOF(CMetroidPrime, CPatterned, 0xee0)
+CHECK_CHILD_SIZEOF(CMetroidPrime, CPatterned, VERSION >= VERSION_GM8P_00 ? 0xee8 : 0xee0)
 NESTED_CHECK_SIZEOF(CMetroidPrime, CMissileTarget, CPhysicsActor_FULL_SIZE)
 NESTED_CHECK_SIZEOF(CMetroidPrime, CMetroidPrimeAttackWeights, 0x3C)
 NESTED_CHECK_SIZEOF(CMetroidPrime, CVulnerabilityEntry, 0x78)
